@@ -49,7 +49,7 @@ export default function ResetPasswordPage() {
       toast.error(error.message as string);
     } else {
       setIsLoading(false);
-      toast.success("Password successfully reset");
+      toast.success("Password reset successfully");
       router.push("/signin");
     }
   };
