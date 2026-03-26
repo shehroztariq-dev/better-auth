@@ -11,7 +11,7 @@ export default function Logout() {
   return (
     <button
       onClick={handleLogout}
-      className="flex items-center gap-2 border px-2 py-1 rounded-lg">
+      className="flex items-center gap-2 border px-2 py-1 rounded-md bg-gray-900">
       Logout <BiLogIn size={20} />
     </button>
   );

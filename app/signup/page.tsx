@@ -11,6 +11,7 @@ import { signUp } from "@/server/user";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -134,13 +135,6 @@ export default function SignUpPage() {
                   {errors.password.message}
                 </p>
               )}
-              <div className="flex items-end w-full justify-end">
-                <a
-                  href="/forgot-password"
-                  className="text-xs font-medium text-zinc-900 dark:text-zinc-50 hover:underline underline-offset-4">
-                  Forgot password?
-                </a>
-              </div>
             </div>
 
             {/* Submit Button */}
@@ -186,11 +180,11 @@ export default function SignUpPage() {
         {/* Sign Up Link */}
         <p className="text-center text-sm text-zinc-600 dark:text-zinc-400 mt-6">
           Already have an account?{" "}
-          <a
+          <Link
             href="/signin"
             className="font-medium text-zinc-900 dark:text-zinc-50 hover:underline underline-offset-4">
             Sign in
-          </a>
+          </Link>
         </p>
       </div>
     </div>
