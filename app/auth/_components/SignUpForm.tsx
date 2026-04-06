@@ -1,21 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { z } from "zod";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+
+import z from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { LuLoaderCircle } from "react-icons/lu";
+
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
+
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+import { LuLoaderCircle } from "react-icons/lu";
 
 const signUpSchema = z.object({
   name: z
@@ -32,9 +35,9 @@ const signUpSchema = z.object({
 
 type SignUpForm = z.infer<typeof signUpSchema>;
 
+// Main
 export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
-
   const form = useForm<SignUpForm>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -46,11 +49,11 @@ export default function SignUpForm() {
 
   const onSubmit = async (data: SignUpForm) => {
     setIsLoading(true);
-    // auth client
+    // Auth Client
     await authClient.signUp.email(
       {
         ...data,
-        callbackURL: "/auth",
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
@@ -71,13 +74,13 @@ export default function SignUpForm() {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-      <FieldGroup className="my-2 gap-2">
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <FieldGroup className="gap-2">
         <Controller
           control={form.control}
           name="name"
           render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid} className="gap-1">
+            <Field data-invalid={fieldState.invalid} className="gap-1.5">
               <FieldLabel htmlFor={field.name}>Name</FieldLabel>
               <Input
                 {...field}
@@ -99,6 +102,7 @@ export default function SignUpForm() {
               <Input
                 {...field}
                 id={field.name}
+                type="email"
                 aria-invalid={fieldState.invalid}
                 autoComplete="off"
               />
@@ -131,14 +135,7 @@ export default function SignUpForm() {
           type="submit"
           disabled={isLoading}
           className="w-full cursor-pointer">
-          {isLoading ? (
-            <>
-              <LuLoaderCircle className=" animate-spin" />
-              Please wait...
-            </>
-          ) : (
-            "Sign Up"
-          )}
+          {isLoading ? <LuLoaderCircle className=" animate-spin" /> : "Sign Up"}
         </Button>
       </FieldGroup>
     </form>

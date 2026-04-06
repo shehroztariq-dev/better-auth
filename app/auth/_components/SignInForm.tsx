@@ -16,8 +16,6 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
-  FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -48,14 +46,12 @@ export default function SignInForm() {
     setIsLoading(true);
     await authClient.signIn.email(
       {
-        email: data.email,
-        password: data.password,
-        callbackURL: "/dashboard",
+        ...data,
       },
       {
         onSuccess: () => {
           toast.success("Sign in successfully");
-          router.push("/dashboard");
+          router.push("/");
           setIsLoading(false);
         },
         onError: (error) => {
@@ -94,13 +90,14 @@ export default function SignInForm() {
               <div className="flex justify-between">
                 <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                 <FieldDescription>
-                  <Button variant={"link"}>
+                  <Button variant={"link"} asChild>
                     <Link href={"/auth/forget-password"}>Forget Password?</Link>
                   </Button>
                 </FieldDescription>
               </div>
               <Input
                 {...field}
+                type="password"
                 id={field.name}
                 aria-invalid={fieldState.invalid}
                 autoComplete="off"
