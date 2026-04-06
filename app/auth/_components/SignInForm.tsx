@@ -20,7 +20,11 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
-export default function SignInForm() {
+export default function SignInForm({
+  openEmailVerificationTab,
+}: {
+  openEmailVerificationTab: (email: string) => void;
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,8 +59,11 @@ export default function SignInForm() {
           setIsLoading(false);
         },
         onError: (error) => {
+          if (error.error.code === "EMAIL_NOT_VERIFIED") {
+            openEmailVerificationTab(data.email);
+            setIsLoading(false);
+          }
           toast.error(error.error.message || "Failed to sign in");
-          setIsLoading(false);
         },
       },
     );

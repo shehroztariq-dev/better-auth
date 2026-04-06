@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Card,
   CardContent,
@@ -9,26 +10,41 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SignInForm from "./_components/SignInForm";
 import SignUpForm from "./_components/SignUpForm";
 import { Separator } from "@/components/ui/separator";
-import SocialOauthButtons from "./_components/Social-oauth-buttons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import EmailVerification from "./_components/email-verification";
+import SocialOauthButtons from "./_components/social-oauth-buttons";
+
+type Tab = "signin" | "signup" | "email-verification";
 
 export default function AuthPage() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [selectedTab, setSelectedtab] = useState<Tab>("signin");
+
   useEffect(() => {
     authClient.getSession().then((session) => {
       if (session.data != null) router.push("/");
     });
   }, [router]);
 
-  return (
-    <Tabs defaultValue="signin" className="w-100">
-      <TabsList>
-        <TabsTrigger value="signin">Sign in</TabsTrigger>
-        <TabsTrigger value="signup">Sign up</TabsTrigger>
-      </TabsList>
+  function openEmailVerificationTab(email: string) {
+    setEmail(email);
+    setSelectedtab("email-verification");
+  }
 
+  return (
+    <Tabs
+      value={selectedTab}
+      onValueChange={(t) => setSelectedtab(t as Tab)}
+      className="w-100">
+      {(selectedTab === "signin" || selectedTab === "signup") && (
+        <TabsList>
+          <TabsTrigger value="signin">Sign in</TabsTrigger>
+          <TabsTrigger value="signup">Sign up</TabsTrigger>
+        </TabsList>
+      )}
       <TabsContent value="signin">
         <Card>
           <CardContent>
@@ -36,7 +52,7 @@ export default function AuthPage() {
             <CardDescription>
               Sign in if you have account or create new account
             </CardDescription>
-            <SignInForm />
+            <SignInForm openEmailVerificationTab={openEmailVerificationTab} />
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
@@ -60,7 +76,7 @@ export default function AuthPage() {
             <CardDescription>
               Create account account to continue.
             </CardDescription>
-            <SignUpForm />
+            <SignUpForm openEmailVerificationTab={openEmailVerificationTab} />
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
@@ -74,6 +90,14 @@ export default function AuthPage() {
             <div className="flex flex-col gap-2">
               <SocialOauthButtons />
             </div>
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="email-verification">
+        <Card>
+          <CardContent>
+            <CardTitle>Verify email</CardTitle>
+            <EmailVerification email={email} />
           </CardContent>
         </Card>
       </TabsContent>

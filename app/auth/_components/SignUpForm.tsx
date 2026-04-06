@@ -19,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { LuLoaderCircle } from "react-icons/lu";
+import { router } from "better-auth/api";
+import { useRouter } from "next/navigation";
 
 const signUpSchema = z.object({
   name: z
@@ -36,8 +38,13 @@ const signUpSchema = z.object({
 type SignUpForm = z.infer<typeof signUpSchema>;
 
 // Main
-export default function SignUpForm() {
+export default function SignUpForm({
+  openEmailVerificationTab,
+}: {
+  openEmailVerificationTab: (email: string) => void;
+}) {
   const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<SignUpForm>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -50,19 +57,21 @@ export default function SignUpForm() {
   const onSubmit = async (data: SignUpForm) => {
     setIsLoading(true);
     // Auth Client
-    await authClient.signUp.email(
+    const res = await authClient.signUp.email(
       {
         ...data,
         callbackURL: "/",
       },
       {
-        onSuccess: () => {
+        onSuccess: (ctx) => {
           toast.success(
             "Account created! Please check your email for verification.",
           );
-
           setIsLoading(false);
           form.reset();
+          if (!ctx.data.user.emailVerified) {
+            openEmailVerificationTab(data.email);
+          }
         },
         onError: (error) => {
           toast.error(error.error.message || "Failed to signup");

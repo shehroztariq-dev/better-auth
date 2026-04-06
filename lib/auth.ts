@@ -12,16 +12,6 @@ const resend = new Resend(process.env.RESEND_API_KEY!);
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
-  emailVerification: {
-    sendVerificationEmail: async ({ user, url }) => {
-      await resend.emails.send({
-        from: `${process.env.APP_NAME} <verification@${process.env.DOMAIN}>`,
-        to: user.email,
-        subject: "Verify you email",
-        react: VerificationEmail({ username: user.name, url: url }),
-      });
-    },
-  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -34,6 +24,17 @@ export const auth = betterAuth({
           username: user.name,
           reseturl: url,
         }),
+      });
+    },
+  },
+  emailVerification: {
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      await resend.emails.send({
+        from: `${process.env.APP_NAME} <verification@${process.env.DOMAIN}>`,
+        to: user.email,
+        subject: "Verify you email",
+        react: VerificationEmail({ username: user.name, url: url }),
       });
     },
   },
