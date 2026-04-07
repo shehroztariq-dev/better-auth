@@ -13,11 +13,11 @@ import {
 } from "@react-email/components";
 
 interface SendWelcomeEmailProps {
-  name: string;
+  username: string;
   email: string;
 }
 
-const SendWelcomeEmail = ({ name, email }: SendWelcomeEmailProps) => {
+const WelcomeEmail = ({ username, email }: SendWelcomeEmailProps) => {
   return (
     <Html lang="en" dir="ltr">
       <Tailwind>
@@ -35,7 +35,7 @@ const SendWelcomeEmail = ({ name, email }: SendWelcomeEmailProps) => {
             {/* Main Content */}
             <Section className="px-10 py-8">
               <Heading className="text-[24px] font-bold text-black mb-4">
-                Hello {name}! 👋
+                Hello {username}! 👋
               </Heading>
 
               <Text className="text-[16px] text-gray-800 mb-6 leading-6">
@@ -83,4 +83,4 @@ const SendWelcomeEmail = ({ name, email }: SendWelcomeEmailProps) => {
   );
 };
 
-export default SendWelcomeEmail;
+export default WelcomeEmail;

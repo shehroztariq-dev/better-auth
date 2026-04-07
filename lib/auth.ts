@@ -1,12 +1,14 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db/drizzle";
-import { nextCookies } from "better-auth/next-js";
 import * as schema from "@/db/schema";
+import { nextCookies } from "better-auth/next-js";
+import { createAuthMiddleware } from "better-auth/api";
 
 import { Resend } from "resend";
 import VerificationEmail from "@/components/emails/VerificationEmail";
 import PasswordResetEmail from "@/components/emails/PasswordResetEmail";
+import WelcomeEmail from "@/components/emails/WelcomeEmail";
 
 export const resend = new Resend(process.env.RESEND_API_KEY!);
 
@@ -28,12 +30,12 @@ export const auth = betterAuth({
     },
   },
   emailVerification: {
-    autoSignInAfterVerification: true,
+    autoSignInAfterVerification: false,
     sendVerificationEmail: async ({ user, url }) => {
       await resend.emails.send({
         from: `${process.env.APP_NAME} <verification@${process.env.DOMAIN}>`,
         to: user.email,
-        subject: "Verify you email",
+        subject: "Verify your email",
         react: VerificationEmail({ username: user.name, url: url }),
       });
     },
@@ -62,6 +64,47 @@ export const auth = betterAuth({
     storage: "database",
     window: 60, // seconds
     max: 10, // requests per window
+  },
+  hooks: {
+    after: createAuthMiddleware(async (ctx) => {
+      // For social sign-up - user is created and verified immediately
+      if (ctx.path === "/sign-up/social") {
+        const user = ctx.context.newSession?.user;
+        const isNewUser = ctx.context.isNewUser; // Check if this is a new user creation
+
+        if (isNewUser && user?.email && user?.name) {
+          await resend.emails
+            .send({
+              from: `${process.env.APP_NAME} <welcome@${process.env.DOMAIN}>`,
+              to: user.email,
+              subject: `Welcome to ${process.env.APP_NAME}!`,
+              react: WelcomeEmail({
+                username: user.name,
+                email: user.email,
+              }),
+            })
+            .catch(console.error);
+        }
+      }
+
+      if (ctx.path === "/verify-email") {
+        const user = ctx.context.newSession?.user;
+
+        if (user?.email && user?.name) {
+          await resend.emails
+            .send({
+              from: `${process.env.APP_NAME} <welcome@${process.env.DOMAIN}>`,
+              to: user.email,
+              subject: `Welcome to ${process.env.APP_NAME}!`,
+              react: WelcomeEmail({
+                username: user.name,
+                email: user.email,
+              }),
+            })
+            .catch(console.error);
+        }
+      }
+    }),
   },
   database: drizzleAdapter(db, {
     provider: "pg",
