@@ -15,8 +15,9 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import EmailVerification from "./_components/email-verification";
 import SocialOauthButtons from "./_components/social-oauth-buttons";
+import ForgotPassword from "./_components/forgot-password";
 
-type Tab = "signin" | "signup" | "email-verification";
+type Tab = "signin" | "signup" | "email-verification" | "forgot-password";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -32,6 +33,12 @@ export default function AuthPage() {
   function openEmailVerificationTab(email: string) {
     setEmail(email);
     setSelectedtab("email-verification");
+  }
+  function openForgotPasswordTab() {
+    setSelectedtab("forgot-password");
+  }
+  function openSignInTab() {
+    setSelectedtab("signin");
   }
 
   return (
@@ -52,7 +59,10 @@ export default function AuthPage() {
             <CardDescription>
               Sign in if you have account or create new account
             </CardDescription>
-            <SignInForm openEmailVerificationTab={openEmailVerificationTab} />
+            <SignInForm
+              openEmailVerificationTab={openEmailVerificationTab}
+              openForgotPasswordTab={openForgotPasswordTab}
+            />
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
@@ -98,6 +108,17 @@ export default function AuthPage() {
           <CardContent>
             <CardTitle>Verify email</CardTitle>
             <EmailVerification email={email} />
+          </CardContent>
+        </Card>
+      </TabsContent>{" "}
+      <TabsContent value="forgot-password">
+        <Card>
+          <CardContent>
+            <CardTitle>Forget Password</CardTitle>
+            <CardDescription className="text-sm text-muted-foreground">
+              Enter email to reset your password
+            </CardDescription>
+            <ForgotPassword openSignInTab={openSignInTab} />
           </CardContent>
         </Card>
       </TabsContent>

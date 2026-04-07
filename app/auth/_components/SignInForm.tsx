@@ -18,12 +18,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 
 export default function SignInForm({
   openEmailVerificationTab,
+  openForgotPasswordTab,
 }: {
   openEmailVerificationTab: (email: string) => void;
+  openForgotPasswordTab: () => void;
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +65,7 @@ export default function SignInForm({
             setIsLoading(false);
           }
           toast.error(error.error.message || "Failed to sign in");
+          setIsLoading(false);
         },
       },
     );
@@ -97,8 +99,11 @@ export default function SignInForm({
               <div className="flex justify-between">
                 <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                 <FieldDescription>
-                  <Button variant={"link"} asChild>
-                    <Link href={"/auth/forget-password"}>Forget Password?</Link>
+                  <Button
+                    variant={"link"}
+                    type="button"
+                    onClick={openForgotPasswordTab}>
+                    Forget Password?
                   </Button>
                 </FieldDescription>
               </div>
