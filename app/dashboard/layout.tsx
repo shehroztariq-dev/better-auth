@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <AppSidebar />
       <main className="w-full">
         <Topbar />
-        <div className="p-10">{children}</div>
+        <div className="p-6 ">{children}</div>
         <FloatComponent position="bottom-center" className="md:hidden block" />
       </main>
     </SidebarProvider>

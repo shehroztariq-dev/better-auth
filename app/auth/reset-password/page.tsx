@@ -15,7 +15,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { LoaderIcon } from "lucide-react";
 import { toast } from "sonner";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { useRouter, useSearchParams } from "next/navigation"; // Add this
 
 type FormData = {

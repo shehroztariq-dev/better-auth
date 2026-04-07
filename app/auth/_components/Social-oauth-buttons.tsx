@@ -1,10 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import {
   SUPPORTED_OAUTH_PROVIDERS,
   SUPPORTED_OAUTH_PROVIDERS_DETAILS,
-} from "@/lib/auth-providers";
+} from "@/lib/auth/auth-providers";
 
 export default function SocialOauthButtons() {
   return SUPPORTED_OAUTH_PROVIDERS.map((provider) => {

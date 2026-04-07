@@ -7,13 +7,11 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarRail,
-  SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowBigLeft } from "lucide-react";
 
@@ -27,6 +25,17 @@ export function AppSidebar() {
     router.push("/");
   };
 
+  const navLinks = [
+    { name: "dashboard", title: "Dashboard", href: "/dashboard" },
+    { name: "profile", title: "Profile", href: "/dashboard/profile" },
+    { name: "admin", title: "Admin", href: "/dashboard/admin" },
+    {
+      name: "organization",
+      title: "Organization",
+      href: "/dashboard/organization",
+    },
+  ];
+
   const path = usePathname();
 
   return (
@@ -38,19 +47,18 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            <SidebarMenuButton asChild>
-              <Link href="/dashboard">Dashboard</Link>
-            </SidebarMenuButton>
-            <SidebarMenuButton asChild>
-              <Link href="/dashboard/profile">Profile </Link>
-            </SidebarMenuButton>
-
-            <SidebarMenuButton asChild>
-              <Link href="/dashboard/admin">Admin </Link>
-            </SidebarMenuButton>
-            <SidebarMenuButton asChild>
-              <Link href="/dashboard/organization">Organization </Link>
-            </SidebarMenuButton>
+            {navLinks.map((nav) => (
+              <SidebarMenuButton
+                className={
+                  path === nav.href
+                    ? "bg-primary text-black hover:bg-primary hover:text-black"
+                    : ""
+                }
+                key={nav.name}
+                asChild>
+                <Link href={nav.href}>{nav.title}</Link>
+              </SidebarMenuButton>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>

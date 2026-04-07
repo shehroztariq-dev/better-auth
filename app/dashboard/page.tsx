@@ -1,5 +1,5 @@
 "use client";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 
 export default function Dashboard() {
   const user = authClient.useSession();

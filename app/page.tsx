@@ -24,7 +24,7 @@ import {
 import { FaGithub, FaLinkedin, FaLock } from "react-icons/fa";
 import { BsTypescript } from "react-icons/bs";
 
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 
 export default function HomePage() {
   const { data: session, isPending: loading } = authClient.useSession();

@@ -11,7 +11,7 @@ import SignInForm from "./_components/SignInForm";
 import SignUpForm from "./_components/SignUpForm";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import EmailVerification from "./_components/email-verification";
 import SocialOauthButtons from "./_components/social-oauth-buttons";
