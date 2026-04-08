@@ -24,6 +24,7 @@ import { redirect } from "next/navigation";
 import { ReactNode, Suspense } from "react";
 import { ProfileUpdateForm } from "./_components/profile-update-form";
 import { LoadingSuspense } from "./_components/loading-suspense";
+import { SecurityTab } from "./_components/security-tab";
 
 export default async function ProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -153,70 +154,5 @@ async function SessionsTab({
         /> */}
       </CardContent>
     </Card>
-  );
-}
-
-async function SecurityTab({
-  email,
-  isTwoFactorEnabled,
-}: {
-  email: string;
-  isTwoFactorEnabled: boolean;
-}) {
-  const [passkeys, accounts] = await Promise.all([
-    auth.api.listPasskeys({ headers: await headers() }),
-    auth.api.listUserAccounts({ headers: await headers() }),
-  ]);
-
-  const hasPasswordAccount = accounts.some(
-    (a) => a.providerId === "credential",
-  );
-
-  return (
-    <div className="space-y-6">
-      {hasPasswordAccount ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Change Password</CardTitle>
-            <CardDescription>
-              Update your password for improved security.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>{/* <ChangePasswordForm /> */}</CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>Set Password</CardTitle>
-            <CardDescription>
-              We will send you a password reset email to set up a password.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>{/* <SetPasswordButton email={email} /> */}</CardContent>
-        </Card>
-      )}
-      {hasPasswordAccount && (
-        <Card>
-          <CardHeader className="flex items-center justify-between gap-2">
-            <CardTitle>Two-Factor Authentication</CardTitle>
-            <Badge variant={isTwoFactorEnabled ? "default" : "secondary"}>
-              {isTwoFactorEnabled ? "Enabled" : "Disabled"}
-            </Badge>
-          </CardHeader>
-          <CardContent>
-            {/* <TwoFactorAuth isEnabled={isTwoFactorEnabled} /> */}
-          </CardContent>
-        </Card>
-      )}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Passkeys</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* <PasskeyManagement passkeys={passkeys} /> */}
-        </CardContent>
-      </Card>
-    </div>
   );
 }

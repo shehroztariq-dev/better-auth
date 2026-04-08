@@ -19,8 +19,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { LuLoaderCircle } from "react-icons/lu";
-import { router } from "better-auth/api";
-import { useRouter } from "next/navigation";
 
 const signUpSchema = z.object({
   name: z
