@@ -11,6 +11,7 @@ import { LoadingSuspense } from "./_components/loading-suspense";
 import { SecurityTab } from "./_components/security-tab";
 import { SessionsTab } from "./_components/session-tab";
 import { LinkedAccountsTab } from "./_components/linked-accounts-tab";
+import AccountDeletion from "./_components/account-deletion";
 
 export default async function ProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -100,7 +101,9 @@ export default async function ProfilePage() {
             <CardHeader>
               <CardTitle className="text-destructive">Danger Zone</CardTitle>
             </CardHeader>
-            <CardContent>{/* <AccountDeletion /> */}</CardContent>
+            <CardContent>
+              <AccountDeletion />
+            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
