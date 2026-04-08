@@ -13,7 +13,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/auth-client";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowBigLeft } from "lucide-react";
 
 export function AppSidebar() {
   const router = useRouter();

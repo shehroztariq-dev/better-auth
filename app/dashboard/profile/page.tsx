@@ -25,6 +25,7 @@ import { ReactNode, Suspense } from "react";
 import { ProfileUpdateForm } from "./_components/profile-update-form";
 import { LoadingSuspense } from "./_components/loading-suspense";
 import { SecurityTab } from "./_components/security-tab";
+import { SessionsTab } from "./_components/session-tab";
 
 export default async function ProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -134,24 +135,6 @@ async function LinkedAccountsTab() {
     <Card>
       <CardContent>
         {/* <AccountLinking currentAccounts={nonCredentialAccounts} /> */}
-      </CardContent>
-    </Card>
-  );
-}
-async function SessionsTab({
-  currentSessionToken,
-}: {
-  currentSessionToken: string;
-}) {
-  const sessions = await auth.api.listSessions({ headers: await headers() });
-
-  return (
-    <Card>
-      <CardContent>
-        {/* <SessionManagement
-          sessions={sessions}
-          currentSessionToken={currentSessionToken}
-        /> */}
       </CardContent>
     </Card>
   );
