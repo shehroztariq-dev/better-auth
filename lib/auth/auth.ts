@@ -3,14 +3,17 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db/drizzle";
 import * as schema from "@/db/schema";
 import { nextCookies } from "better-auth/next-js";
-import { createAuthMiddleware } from "better-auth/api";
 
 import { Resend } from "resend";
 import VerificationEmail from "@/components/emails/VerificationEmail";
 import PasswordResetEmail from "@/components/emails/PasswordResetEmail";
-import WelcomeEmail from "@/components/emails/WelcomeEmail";
 import EmailChangeConfirmation from "@/components/emails/EmailChangeConfirmation";
+
+import { createAuthMiddleware } from "better-auth/api";
+import WelcomeEmail from "@/components/emails/WelcomeEmail";
 import EmailChangeNotification from "@/components/emails/EmailChangeNotification";
+
+import { twoFactor } from "better-auth/plugins";
 
 export const resend = new Resend(process.env.RESEND_API_KEY!);
 
@@ -165,5 +168,5 @@ export const auth = betterAuth({
     provider: "pg",
     schema: schema,
   }),
-  plugins: [nextCookies()],
+  plugins: [nextCookies(), twoFactor()],
 });

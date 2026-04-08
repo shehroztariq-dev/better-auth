@@ -8,10 +8,10 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { ProfileUpdateForm } from "./_components/profile-update-form";
 import { LoadingSuspense } from "./_components/loading-suspense";
-import { SecurityTab } from "./_components/security-tab";
 import { SessionsTab } from "./_components/session-tab";
 import { LinkedAccountsTab } from "./_components/linked-accounts-tab";
 import AccountDeletion from "./_components/account-deletion";
+import { SecurityTab } from "./_components/security/security-tab";
 
 export default async function ProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -80,7 +80,10 @@ export default async function ProfilePage() {
 
         <TabsContent value="security">
           <LoadingSuspense>
-            <SecurityTab email={session.user.email} />
+            <SecurityTab
+              email={session.user.email}
+              isTwoFactorEnabled={session.user.twoFactorEnabled ?? false}
+            />
           </LoadingSuspense>
         </TabsContent>
 
