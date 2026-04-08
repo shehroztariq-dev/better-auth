@@ -4,11 +4,10 @@ import { FcGoogle } from "react-icons/fc";
 import { IconType } from "react-icons/lib";
 
 export const SUPPORTED_OAUTH_PROVIDERS = ["google", "github", "discord"];
-export type supportedOauthProviders =
-  (typeof SUPPORTED_OAUTH_PROVIDERS)[number];
+export type SupportedOAuthProvider = (typeof SUPPORTED_OAUTH_PROVIDERS)[number];
 
 export const SUPPORTED_OAUTH_PROVIDERS_DETAILS: Record<
-  supportedOauthProviders,
+  SupportedOAuthProvider,
   { name: string; Icon: IconType }
 > = {
   google: { name: "Google", Icon: FcGoogle },

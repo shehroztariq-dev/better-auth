@@ -1,31 +1,16 @@
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { auth } from "@/lib/auth/auth";
-import {
-  ArrowLeft,
-  Key,
-  LinkIcon,
-  Loader2Icon,
-  Shield,
-  Trash2,
-  User,
-} from "lucide-react";
+import { Key, LinkIcon, Shield, Trash2, User } from "lucide-react";
 import { headers } from "next/headers";
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ReactNode, Suspense } from "react";
 import { ProfileUpdateForm } from "./_components/profile-update-form";
 import { LoadingSuspense } from "./_components/loading-suspense";
 import { SecurityTab } from "./_components/security-tab";
 import { SessionsTab } from "./_components/session-tab";
+import { LinkedAccountsTab } from "./_components/linked-accounts-tab";
 
 export default async function ProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -120,22 +105,5 @@ export default async function ProfilePage() {
         </TabsContent>
       </Tabs>
     </div>
-  );
-}
-
-async function LinkedAccountsTab() {
-  const accounts = await auth.api.listUserAccounts({
-    headers: await headers(),
-  });
-  const nonCredentialAccounts = accounts.filter(
-    (a) => a.providerId !== "credential",
-  );
-
-  return (
-    <Card>
-      <CardContent>
-        {/* <AccountLinking currentAccounts={nonCredentialAccounts} /> */}
-      </CardContent>
-    </Card>
   );
 }
